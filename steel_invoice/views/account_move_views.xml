@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record id="view_move_form_steel_items" model="ir.ui.view">
+			<field name="name">
+				account.move.form.steel.items
+			</field>
+			<field name="model">account.move</field>
+			<field name="inherit_id" ref="account.view_move_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//div[@name='button_box']" position="inside">
+					<button name="action_view_steel_pickings" type="object" class="oe_stat_button" icon="fa-truck" invisible="steel_picking_count == 0">
+						<field name="steel_picking_count" widget="statinfo" string="Delivery Orders" />
+					</button>
+				</xpath>
+                <xpath expr="//page[@id='invoice_tab']" position="before">
+                    <!-- Add inside your page, outside the list, hidden -->
+                    <field name="has_rolling" invisible="1" />
+                    <field name="has_sail_jindal" invisible="1" />
+                </xpath>
+				<xpath expr="//page[@id='invoice_tab']" position="after">
+                    <page string="Steel Items" name="steel_items" invisible="move_type == 'entry' or (is_from_sale_order and not is_steel_invoice)">
+                        <field name="steel_line_ids" nolabel="1">
+                            <list editable="bottom" string="Steel Items" readonly="parent.state != 'draft'">
+                                <field name="make" readonly="parent.state != 'draft'" />
+                                <field name="product_id" readonly="parent.state != 'draft'" />
+                                
+
+                                <field name="description"
+                                    readonly="parent.state != 'draft'"
+                                    invisible="make != 'rolling'"
+                                    column_invisible="not parent.has_rolling" />
+
+                                <field name="thickness"
+                                    readonly="parent.state != 'draft'"
+                                    invisible="make != 'sail_jindal'"
+                                    column_invisible="not parent.has_sail_jindal" />
+
+                                <field name="width"
+                                    readonly="parent.state != 'draft'"
+                                    invisible="make != 'sail_jindal'"
+                                    column_invisible="not parent.has_sail_jindal" />
+
+                                <field name="length_mm"
+                                    readonly="parent.state != 'draft'"
+                                    invisible="make != 'sail_jindal'"
+                                    column_invisible="not parent.has_sail_jindal" />
+
+                                <field name="length_meter"
+                                    readonly="parent.state != 'draft'"
+                                    invisible="make != 'rolling'"
+                                    column_invisible="not parent.has_rolling" />
+
+                                <field name="grade" readonly="parent.state != 'draft'" />
+
+                                <field name="qty_nos" string="Qty Nos"
+                                    readonly="parent.state != 'draft'"
+                                    invisible="make != 'sail_jindal'"
+                                    column_invisible="not parent.has_sail_jindal" />
+
+                                <field name="qty_mt" string="Qty MT" readonly="parent.state != 'draft'" />
+                                <field name="rate_mt" string="Rate/MT" readonly="parent.state != 'draft'" />
+                                <field name="amount" readonly="1" />
+                            </list>
+                        </field>
+                    </page>
+                </xpath>
+			</field>
+		</record>
+	</data>
+</odoo>
